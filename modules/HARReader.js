@@ -1,22 +1,23 @@
 'use strict';
+var fs = require('fs');
 class HARReader {
     constructor() {
-        this.httpPaths = {};
+        this.har = null;
     }
 
     /**
      * Opens the HAR file and calls other utility methods
      * */
-    readHar() {
-        this.readHttpPaths(this.filePath);
-        return 1;
+    readHar(filePath) {
+        this.har = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        this.readHttpPaths();
     }
 
     /**
      * Reads paths from the HAR file and keeps them in memory
      * */
-    readHttpPaths() {
-
+    readEntries() {
+        
     }
 
     /**
@@ -24,6 +25,10 @@ class HARReader {
      * */
     readHttpData() {
 
+    }
+
+    readHttpPaths() {
+        
     }
 }
 
