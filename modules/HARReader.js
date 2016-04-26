@@ -1,35 +1,38 @@
 'use strict';
-var fs = require('fs');
-class HARReader {
+let fs = require('fs'),
+    url = require('url');
+class HarReader {
     constructor() {
         this.har = null;
+        this.responseMap = new Map(); //Can be done with an object too, but using a map just because
     }
 
     /**
      * Opens the HAR file and calls other utility methods
      * */
     readHar(filePath) {
-        this.har = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        this.readHttpPaths();
+        let rawHar = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        rawHar.log.entries.forEach((entry) => {
+            this.responseMap.set(this.getPathUrl(entry.request.url), entry.response);
+        });
     }
 
     /**
-     * Reads paths from the HAR file and keeps them in memory
+     * Returns a response object from the HAR file given a URL
      * */
-    readEntries() {
-        
+    getPathUrl(passedUrl) {
+        passedUrl = url.parse(passedUrl).pathname;
+        return passedUrl;
     }
 
     /**
-     * Reads data for a given HTTP path
+     * Returns response Object from the HAR file
      * */
-    readHttpData() {
-
-    }
-
-    readHttpPaths() {
-        
+    getResponseForUrl(passedUrl) {
+        let parsedUrl = this.getPathUrl(passedUrl),
+            storedResponse = this.responseMap.get(parsedUrl);
+        if (typeof storedResponse === 'undefined')
+            throw new Error('Response doesn\'t exist in HAR file for path ' + parsedUrl);
     }
 }
-
-module.exports = HARReader;
+module.exports = HarReader;

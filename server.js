@@ -3,8 +3,8 @@ let express = require('express'),
     app = express(),
     port = process.env.PORT || 1121,
     parseArgs = require('minimist'),
-    routes = require('./modules/Routes.js'),
-    harReader = require('./modules/HarReader.js'),
+    routes = require('./Modules/Routes.js'),
+    harReader = require('./Modules/HarReader.js'),
     har = new harReader();
 
 app.listen(port, ()=> { //Start the server and listen on a port
@@ -12,10 +12,10 @@ app.listen(port, ()=> { //Start the server and listen on a port
     console.log('Running Yama at:' + port);
 });
 app.get('/*', (req, res) => {
-    let url = har.getPathUrl(req.url),
-        headers = har.getResponseHeaders(req.url),
-        body = har.getResponseBody(req.url),
-        cookies = har.getCookies(req.url);
-        
-    
+    let storedResponse;
+    try {
+        storedResponse = har.getResponseForUrl(req.url);
+    } catch (e) {
+        res.send(e.message);
+    }
 });
