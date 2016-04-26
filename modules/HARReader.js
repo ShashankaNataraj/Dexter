@@ -11,9 +11,10 @@ class HarReader {
      * Opens the HAR file and calls other utility methods
      * */
     readHar(filePath) {
-        let rawHar = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        rawHar.log.entries.forEach((entry) => {
-            this.responseMap.set(this.getPathUrl(entry.request.url), entry.response);
+        fs.readFile(filePath, (error,rawHar)=>{
+            JSON.parse(rawHar).log.entries.forEach((entry) => {
+                this.responseMap.set(this.getPathUrl(entry.request.url), entry.response);
+            });
         });
     }
 
@@ -33,6 +34,7 @@ class HarReader {
             storedResponse = this.responseMap.get(parsedUrl);
         if (typeof storedResponse === 'undefined')
             throw new Error('Response doesn\'t exist in HAR file for path ' + parsedUrl);
+        else return storedResponse;
     }
 }
 module.exports = HarReader;

@@ -11,11 +11,13 @@ app.listen(port, ()=> { //Start the server and listen on a port
     har.readHar('sample.har');
     console.log('Running Yama at:' + port);
 });
-app.get('/*', (req, res) => {
+app.get('/*', (request, response) => {
     let storedResponse;
     try {
-        storedResponse = har.getResponseForUrl(req.url);
+        storedResponse = har.getResponseForUrl(request.url);
+        response.setHeader('Content-Type', storedResponse.content.mimeType);
+        response.setHeader('Content-Type', storedResponse.content.mimeType);
     } catch (e) {
-        res.send(e.message);
+        response.send(e.message);
     }
 });
