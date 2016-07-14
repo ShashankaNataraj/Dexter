@@ -1,5 +1,5 @@
 ![alt text](https://travis-ci.org/ShashankaNataraj/Yama.svg?branch=master "Build Status")
-![alt](http://vignette2.wikia.nocookie.net/dexterslab/images/5/5b/Dexter-dexters-laboratory-13130752-445-620.jpg/revision/latest?cb=20120417000328)
+![alt](http://vignette2.wikia.nocookie.net/dexterslab/images/5/5b/Dexter-dexters-laboratory-13130752-445-620.jpg/revision/latest?cb=20120417000328 =100x100)
 ### What is Dexter?
 Dexter is a [HAR file](https://www.maxcdn.com/one/visual-glossary/har-file/) proxy server.
 
