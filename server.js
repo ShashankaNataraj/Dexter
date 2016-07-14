@@ -3,10 +3,11 @@ let express = require('express'),
     app = express(),
     port = process.env.PORT || 1121,
     parseArgs = require('minimist'),
-    routes = require('./modules/Routes.js'),
-    harReader = require('./modules/HarReader.js'),
+    routes = require('./src/Routes.js'),
+    harReader = require('./src/HarReader.js'),
     har = new harReader(),
-    colors = require('colors');
+    colors = require('colors'),
+    _ = require('underscore');
 
 app.listen(port, ()=> { //Start the server and listen on a port
     har.readHar('sample.har');
@@ -15,6 +16,7 @@ app.listen(port, ()=> { //Start the server and listen on a port
 app.get('/favicon.ico', function (request, response) {
     response.end();
 });
+
 app.get('/*', (request, response) => {
     let storedResponse;
     let url = request.url;
@@ -28,8 +30,31 @@ app.get('/*', (request, response) => {
     }
     if (storedResponse) {
         process.stdout.write(colors.green('Found entry, writing response with headers and cookies'));
-        storedResponse.headers.forEach((header)=>response.setHeader(header.name,header.value));
+        // Set the status
         response.status(storedResponse.status);
+        // Set the headers
+        storedResponse.headers.forEach((header)=> {
+            /**
+             * GZIPPing is not supported as of now and some REST clients such as webstorms built in one will throw an error
+             */
+            if (header.value !== 'gzip') {
+                response.setHeader(header.name, header.value)
+            }
+        });
+        // Set the cookies
+
+        storedResponse.cookies.forEach((cookie)=> {
+            console.log(cookie);
+            let shavedCookie = _.clone(cookie);
+            delete shavedCookie.name;
+            delete shavedCookie.value;
+            console.log(cookie.name + ":" + cookie.value);
+            if (shavedCookie.expires !== null) {
+                shavedCookie.expires = new Date(shavedCookie.expires);
+            }
+            response.cookie(cookie.name, cookie.value, shavedCookie);
+        });
+        response.send(storedResponse.content.text);
         response.end();
     }
 });

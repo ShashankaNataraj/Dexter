@@ -13,6 +13,7 @@
     "grunt-contrib-jasmine": "^1.0.3",
     "grunt-jasmine-runner": "^0.6.0",
     "minimist": "^1.2.0",
+    "underscore": "^1.8.3",
     "wurl": "^2.1.0"
   },
   "scripts": {
