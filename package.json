@@ -4,13 +4,16 @@
   "description": "The HAR file proxy server",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.13.4"
+    "colors": "^1.1.2",
+    "express": "^4.13.4",
+    "wurl": "^2.1.0"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-jasmine": "^1.0.3",
     "grunt-jasmine-runner": "^0.6.0",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "wurl": "^2.1.0"
   },
   "scripts": {
     "test": "grunt test"
