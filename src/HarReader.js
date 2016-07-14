@@ -2,6 +2,7 @@
 let fs = require('fs'),
     url = require('url'),
     wurl = require('wurl');
+
 class HarReader {
     constructor() {
         this.responseMap = new Map(); //Can be done with an object too, but using a map just because
@@ -13,7 +14,7 @@ class HarReader {
     readHar(filePath) {
         fs.readFile(filePath, (err, rawHar)=> {
             let parsedHar;
-            if (err) {// Catch file existance issues
+            if (err) {// Catch file existence issues
                 throw err;
             }
             else {
@@ -37,7 +38,7 @@ class HarReader {
      * Returns response Object from the HAR file
      * */
     getResponseForUrl(passedUrl) {
-        let url = wurl('path',passedUrl),
+        let url = wurl('path', passedUrl),
             storedResponse = this.responseMap.get(url);
         if (typeof storedResponse === 'undefined')
             throw new Error('Response doesn\'t exist in HAR file for path ' + url);

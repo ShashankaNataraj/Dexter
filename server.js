@@ -3,11 +3,11 @@ let express = require('express'),
     app = express(),
     port = process.env.PORT || 1121,
     parseArgs = require('minimist'),
-    routes = require('./src/Routes.js'),
     harReader = require('./src/HarReader.js'),
+    harUtils = require('./src/HarUtils.js'),
     har = new harReader(),
-    colors = require('colors'),
-    _ = require('underscore');
+    utils = new harUtils(),
+    colors = require('colors');
 
 app.listen(port, ()=> { //Start the server and listen on a port
     har.readHar('sample.har');
@@ -20,16 +20,16 @@ app.get('/favicon.ico', function (request, response) {
 app.get('/*', (request, response) => {
     let storedResponse;
     let url = request.url;
-    process.stdout.write(colors.yellow('Received request for ' + url + ':'));
+    process.stdout.write(colors.yellow('Serving ' + url + ':'));
     try {
         storedResponse = har.getResponseForUrl(request.url);
     } catch (e) {
-        process.stdout.write(colors.red('Didn\'t find corresponding entry in HAR, returning 404'));
+        process.stdout.write(colors.red('Didn\'t find corresponding entry in HAR, returning 404\n'));
         response.statusCode = 404;
         response.send(e.message);
     }
     if (storedResponse) {
-        process.stdout.write(colors.green('Found entry, writing response with headers and cookies'));
+        process.stdout.write(colors.green('Found entry, writing response with headers and cookies... '));
         // Set the status
         response.status(storedResponse.status);
         // Set the headers
@@ -41,20 +41,13 @@ app.get('/*', (request, response) => {
                 response.setHeader(header.name, header.value)
             }
         });
-        // Set the cookies
-
+        // Set Cookies
         storedResponse.cookies.forEach((cookie)=> {
-            console.log(cookie);
-            let shavedCookie = _.clone(cookie);
-            delete shavedCookie.name;
-            delete shavedCookie.value;
-            console.log(cookie.name + ":" + cookie.value);
-            if (shavedCookie.expires !== null) {
-                shavedCookie.expires = new Date(shavedCookie.expires);
-            }
+            let shavedCookie = utils.processCookie(cookie);
             response.cookie(cookie.name, cookie.value, shavedCookie);
         });
         response.send(storedResponse.content.text);
+        process.stdout.write(colors.green('Done \n'));
         response.end();
     }
 });
