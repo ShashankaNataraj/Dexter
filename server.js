@@ -18,22 +18,18 @@ app.get('/favicon.ico', function (request, response) {
 app.get('/*', (request, response) => {
     let storedResponse;
     let url = request.url;
-    console.log(colors.yellow('Received request for:' + url));
+    process.stdout.write(colors.yellow('Received request for ' + url + ':'));
     try {
-        console.log('inside');
         storedResponse = har.getResponseForUrl(request.url);
-
-        console.log(storedResponse);
-        storedResponse.headers.forEach(function (header) {
-            response.setHeader(header.name, header.value)
-        });
-        response.write('asd');
-        // storedResponse.headers.forEach(({word, count}) => {
-        //     console.log(word+' '+count);
-        // });
     } catch (e) {
+        process.stdout.write(colors.red('Didn\'t find corresponding entry in HAR, returning 404'));
+        response.statusCode = 404;
         response.send(e.message);
-    } finally {
+    }
+    if (storedResponse) {
+        process.stdout.write(colors.green('Found entry, writing response with headers and cookies'));
+        storedResponse.headers.forEach((header)=>response.setHeader(header.name,header.value));
+        response.status(storedResponse.status);
         response.end();
     }
 });

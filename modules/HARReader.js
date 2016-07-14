@@ -1,9 +1,9 @@
 'use strict';
 let fs = require('fs'),
-    url = require('url');
+    url = require('url'),
+    wurl = require('wurl');
 class HarReader {
     constructor() {
-        this.har = null;
         this.responseMap = new Map(); //Can be done with an object too, but using a map just because
     }
 
@@ -11,29 +11,36 @@ class HarReader {
      * Opens the HAR file and calls other utility methods
      * */
     readHar(filePath) {
-        fs.readFile(filePath, (error,rawHar)=>{
-            JSON.parse(rawHar).log.entries.forEach((entry) => {
-                this.responseMap.set(this.getPathUrl(entry.request.url), entry.response);
-            });
+        fs.readFile(filePath, (err, rawHar)=> {
+            let parsedHar;
+            if (err) {// Catch file existance issues
+                throw err;
+            }
+            else {
+                try {
+                    parsedHar = JSON.parse(rawHar);
+                }
+                catch (err) {//Catch JSON format exceptions
+                    throw err;
+                }
+                parsedHar.log.entries.forEach((entry) => { //Construct response map based structure
+                    this.responseMap.set(
+                        wurl('path', entry.request.url), // Take in only the paths, not the domain names because thats of no use to us
+                        entry.response
+                    );
+                });
+            }
         });
-    }
-
-    /**
-     * Returns a response object from the HAR file given a URL
-     * */
-    getPathUrl(passedUrl) {
-        passedUrl = url.parse(passedUrl).pathname;
-        return passedUrl;
     }
 
     /**
      * Returns response Object from the HAR file
      * */
     getResponseForUrl(passedUrl) {
-        let parsedUrl = this.getPathUrl(passedUrl),
-            storedResponse = this.responseMap.get(parsedUrl);
+        let url = wurl('path',passedUrl),
+            storedResponse = this.responseMap.get(url);
         if (typeof storedResponse === 'undefined')
-            throw new Error('Response doesn\'t exist in HAR file for path ' + parsedUrl);
+            throw new Error('Response doesn\'t exist in HAR file for path ' + url);
         else return storedResponse;
     }
 }
