@@ -1,4 +1,4 @@
-![alt text](https://travis-ci.org/ShashankaNataraj/Yama.svg?branch=master "Build Status")
+[![Build Status](https://travis-ci.org/ShashankaNataraj/Dexter.svg?branch=master)](https://travis-ci.org/ShashankaNataraj/Dexter)
 [![Coverage Status](https://coveralls.io/repos/github/ShashankaNataraj/Dexter/badge.svg?branch=master)](https://coveralls.io/github/ShashankaNataraj/Dexter?branch=master)
 
 ### What is Dexter?
