@@ -1,33 +1,33 @@
 'use strict';
-let fs = require('fs'),
+const fs = require('fs'),
     url = require('url'),
-    wurl = require('wurl');
+    wurl = require('wurl'),
+    readFile = require('fs-readfile-promise');
 
 class HarReader {
     constructor() {
         this.responseMap = new Map(); //Can be done with an object too, but using a map just because
-        this.parsedHar = {};
+        this.parsedHar = null;
     }
 
     /**
      * Opens the HAR file and calls other utility methods
      * */
     readHar(filePath) {
-        fs.readFile(filePath, (err, rawHar)=> {
-            let parsedHar;
-            if (err) {// Catch file existence issues
-                throw err;
-            }
-            else {
+        return readFile(filePath)
+            .then(rawHar=> {
                 try {
+                    console.log('init\'d');
                     this.parsedHar = JSON.parse(rawHar);
                 }
                 catch (err) {//Catch JSON format exceptions
                     throw err;
                 }
                 this.parseHar();
-            }
-        });
+            })
+            .catch(err=> {
+                throw err;
+            });
     }
 
     parseHar() {
@@ -37,6 +37,7 @@ class HarReader {
                 entry.response
             );
         });
+        return this.responseMap;
     }
 
     /**
