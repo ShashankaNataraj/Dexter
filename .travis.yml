@@ -4,8 +4,5 @@ node_js:
   - "6.1"
 install:
   - npm install
-before_install:
-  - npm install grunt
-  - npm install -g grunt-cli
-install: npm install
-before_script: grunt build
+after_script:
+  - npm test
