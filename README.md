@@ -1,4 +1,5 @@
 ![alt text](https://travis-ci.org/ShashankaNataraj/Yama.svg?branch=master "Build Status")
+[![Coverage Status](https://coveralls.io/repos/github/ShashankaNataraj/Dexter/badge.svg?branch=master)](https://coveralls.io/github/ShashankaNataraj/Dexter?branch=master)
 
 ### What is Dexter?
 Dexter is a [HAR file](https://www.maxcdn.com/one/visual-glossary/har-file/) proxy server.
