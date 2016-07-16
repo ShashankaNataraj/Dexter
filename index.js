@@ -82,6 +82,6 @@ app.use(express.static('public'));
  * Start listening
  * */
 app.listen(port, ()=> { //Start the server and listen on a port
-    har.readHar('spec/data/sample.har');
+    har.readHar('test/data/sample.har');
     console.log(colors.green.bold('Started Yama at:' + port));
 });

@@ -14,10 +14,11 @@ class HarReader {
      * Opens the HAR file and calls other utility methods
      * */
     readHar(filePath) {
+        console.log('ASD:' + filePath);
         return readFile(filePath)
             .then(rawHar=> {
                 try {
-                    console.log('init\'d');
+                    console.log('here1111');
                     this.parsedHar = JSON.parse(rawHar);
                 }
                 catch (err) {//Catch JSON format exceptions

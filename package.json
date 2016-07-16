@@ -10,14 +10,16 @@
     "wurl": "^2.1.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "fs-readfile-promise": "^3.0.0",
     "minimist": "^1.2.0",
+    "mocha": "^2.5.3",
     "underscore": "^1.8.3",
     "wurl": "^2.1.0"
   },
   "scripts": {
     "start": "node index.js",
-    "test": "jasmine --matchall --noColor --verbose spec/*.spec.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
