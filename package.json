@@ -11,17 +11,19 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.11",
     "fs-readfile-promise": "^3.0.0",
     "istanbul": "^0.4.4",
     "minimist": "^1.2.0",
     "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
     "underscore": "^1.8.3",
     "wurl": "^2.1.0"
   },
   "scripts": {
     "start": "node index.js",
     "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R spec"
+    "coverage": "istanbul cover _mocha -- -R spec | coveralls"
   },
   "repository": {
     "type": "git",
