@@ -12,6 +12,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "fs-readfile-promise": "^3.0.0",
+    "istanbul": "^0.4.4",
     "minimist": "^1.2.0",
     "mocha": "^2.5.3",
     "underscore": "^1.8.3",
@@ -19,7 +20,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "istanbul cover _mocha -- -R spec"
   },
   "repository": {
     "type": "git",
