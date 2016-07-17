@@ -2,7 +2,8 @@
 /**
  * Requires
  * */
-const express = require('express'),
+const
+    express = require('express'),
     colors = require('colors'),
     parseArgs = require('minimist'),
     harReader = require('./src/HarReader'),
@@ -11,7 +12,8 @@ const express = require('express'),
 /**
  * Lets for later usage
  * */
-const app = express(),
+const
+    app = express(),
     port = process.env.PORT || 1121,
     har = new harReader(),
     utils = new harUtils();
@@ -83,5 +85,5 @@ app.use(express.static('public'));
  * */
 app.listen(port, ()=> { //Start the server and listen on a port
     har.readHar('test/data/sample.har');
-    console.log(colors.green.bold('Started Yama at:' + port));
+    console.log(colors.green.bold('Started Dexter at:' + port));
 });

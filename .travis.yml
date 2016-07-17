@@ -7,3 +7,5 @@ install:
   - npm install -g mocha
 after_script:
   - npm test
+after_success:
+  - coveralls

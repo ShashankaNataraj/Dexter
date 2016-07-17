@@ -6,15 +6,14 @@ const harReader = require('../src/HarReader'),
 
 
 describe('HAR Reader', function () {
-    it('should throw an error on files which don\'t exist', function () {
+    it('should throw an error if files which don\'t exist are used', function () {
         return har
-            .readHar(path.resolve(__dirname, 'data/doesnt_exist.har'))
+            .readHar(path.resolve(__dirname, 'test/data/doesnt_exist.har'))
             .catch(function (data) {
                 expect(data.code).to.equal('ENOENT');
             });
     });
-
-    it('should be able to load a HAR file', function () {
+    it('should be able to load a HAR file and parse it', function () {
         return har
             .readHar('test/data/sample.har')
             .then((data) => {
