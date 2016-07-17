@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/ShashankaNataraj/Dexter.svg?branch=master)](https://travis-ci.org/ShashankaNataraj/Dexter)
 [![Coverage Status](https://coveralls.io/repos/github/ShashankaNataraj/Dexter/badge.svg?branch=master)](https://coveralls.io/github/ShashankaNataraj/Dexter?branch=master)
+[![Dependency status](https://david-dm.org/shashankanataraj/Dexter/status.png)](https://david-dm.org/cfogelberg/grunt-set-app-mode#info=dependencies&view=table)
 
 ### What is Dexter?
 Dexter is a [HAR file](https://www.maxcdn.com/one/visual-glossary/har-file/) proxy server.
