@@ -1,14 +1,16 @@
 'use strict';
-const harReader = require('../src/HarReader'),
+const
+    harReader = require('../src/HarReader'),
     path = require('path'),
     har = new harReader(),
-    expect = require('chai').expect;
+    expect = require('chai').expect,
+    harPath = path.resolve(__dirname, 'test/data/doesnt_exist.har');
 
 
-describe('HAR Reader', function () {
+describe('HAR Reader', () => {
     it('should throw an error if files which don\'t exist are used', function () {
         return har
-            .readHar(path.resolve(__dirname, 'test/data/doesnt_exist.har'))
+            .readHar(harPath)
             .catch(function (data) {
                 expect(data.code).to.equal('ENOENT');
             });

@@ -5,18 +5,21 @@
  * */
 const
     express = require('express'),
-    colors = require('colors'),
     parseArgs = require('minimist'),
+    path = require('path'),
+    EventEmitter = require('events').EventEmitter,
     harReader = require(__dirname + '/HarReader'),
-    harUtils = require(__dirname + '/HarUtils'),
-    path = require("path");
+    HarUtils = require(__dirname + '/HarUtils');
 
-class Dexter {
-    constructor(harPath) {
+const
+    utils = new HarUtils();
+
+class Dexter extends EventEmitter {
+    constructor(harPath, port) {
+        super();
         this._app = express();
-        this._port = process.env.PORT || 1121;
+        this._port = port || 1121;
         this._har = new harReader();
-        this._utils = new harUtils();
         this._harPath = harPath;
     }
 
@@ -27,6 +30,7 @@ class Dexter {
         this.attachMethodHandlers();
         this.attachCustomRoutes();
         this.startServer();
+        return this;
     }
 
     /**
@@ -35,7 +39,7 @@ class Dexter {
     startServer() {
         this.server = this._app.listen(this._port, ()=> { //Start the server and listen on a port
             this._har.readHar(this._harPath);
-            console.log(colors.green.bold('Started Dexter at:' + this._port));
+            this.emit('startupSuccess', this._port);
         });
     }
 
@@ -52,36 +56,41 @@ class Dexter {
      * Generic handler for all HTTP methods
      * */
     genericHandler(request, response, method) {
-        let storedResponse;
-        let url = request.url;
-        process.stdout.write(colors.yellow('Serving ' + url + ':'));
+        let
+            storedResponse,
+            url = request.url;
+
+        this.emit('receivedRequest', url);
         try {
             storedResponse = this._har.getResponseForUrl(request.url, method);
         } catch (e) {
-            process.stdout.write(colors.red('Didn\'t find corresponding entry in HAR, returning 404\n'));
+            this.emit('noEntryInHar');
             response.statusCode = 404;
-            response.sendFile(path.resolve(__dirname, '..', '..') + '/public/404.html');
+            response.end();
         }
-        if (storedResponse) {
-            process.stdout.write(colors.green('Found entry, writing response with headers and cookies... '));
+        if (typeof storedResponse !== 'undefined') {
+            this.emit('foundHarEntry');
             // Set the status
             response.status(storedResponse.status);
+
             // Set the headers
-            let headers = this._utils.filterHeaders(storedResponse.headers);
+            let headers = utils.filterHeaders(storedResponse.headers);
             headers.forEach((header)=> {
                 response.setHeader(header.name, header.value)
             });
+
             // Set Cookies
             storedResponse.cookies.forEach((cookie)=> {
                 response.cookie(
                     cookie.name,
                     cookie.value,
-                    this._utils.processCookie(cookie)
+                    utils.processCookie(cookie)
                 );
             });
+
             // Send the text content
             response.send(storedResponse.content.text);
-            process.stdout.write(colors.green('Done \n'));
+            this.emit('requestServedSuccessfully');
             response.end();
         }
     }
@@ -89,7 +98,7 @@ class Dexter {
     attachCustomRoutes() {
         this._app.all('/404', (request, response)=> {
             response.statusCode = 404;
-            response.send('asdasd 404');
+            response.send('404');
             response.end();
         });
     }
@@ -99,6 +108,7 @@ class Dexter {
      * */
     tearDown() {
         this.server.close();
+        this.emit('shutdownSuccess', this._port);
     }
 }
 

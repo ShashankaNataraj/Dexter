@@ -1,1 +1,2 @@
-const harUtils = require('../src/HarUtils');
+const
+    harUtils = require('../src/HarUtils');

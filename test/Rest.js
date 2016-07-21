@@ -1,4 +1,6 @@
-const Dexter = require('../src/Dexter.js'),
+const
+    path = require('path'),
+    Dexter = require('../src/Dexter.js'),
     dexterServer = new Dexter(path.resolve(__dirname, 'test/data/doesnt_exist.har'));
 
 describe('Rest API', () => {
@@ -7,7 +9,7 @@ describe('Rest API', () => {
     });
 
     it('should\'ve started the server', function () {
-
+        
     });
 
     after(() => {
