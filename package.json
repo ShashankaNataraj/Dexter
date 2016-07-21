@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ShashankaNataraj/Yama.git"
+    "url": "git+https://github.com/ShashankaNataraj/Dexter.git"
   },
   "author": "Shashanka Nataraj",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ShashankaNataraj/Yama/issues"
+    "url": "https://github.com/ShashankaNataraj/Dexter/issues"
   },
-  "homepage": "https://github.com/ShashankaNataraj/Yama#readme"
+  "homepage": "https://github.com/ShashankaNataraj/Dexter#readme"
 }

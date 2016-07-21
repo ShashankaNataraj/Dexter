@@ -8,7 +8,8 @@ const
     colors = require('colors'),
     parseArgs = require('minimist'),
     harReader = require(__dirname + '/HarReader'),
-    harUtils = require(__dirname + '/HarUtils');
+    harUtils = require(__dirname + '/HarUtils'),
+    path = require("path");
 
 class Dexter {
     constructor(harPath) {
@@ -24,7 +25,7 @@ class Dexter {
      * */
     startUp() {
         this.attachMethodHandlers();
-        this.serveStaticFiles();
+        this.attachCustomRoutes();
         this.startServer();
     }
 
@@ -48,13 +49,6 @@ class Dexter {
     }
 
     /**
-     * Serve static files
-     */
-    serveStaticFiles() {
-        this._app.use(express.static('public'));
-    }
-
-    /**
      * Generic handler for all HTTP methods
      * */
     genericHandler(request, response, method) {
@@ -66,7 +60,7 @@ class Dexter {
         } catch (e) {
             process.stdout.write(colors.red('Didn\'t find corresponding entry in HAR, returning 404\n'));
             response.statusCode = 404;
-            response.send(e.message);
+            response.sendFile(path.resolve(__dirname, '..', '..') + '/public/404.html');
         }
         if (storedResponse) {
             process.stdout.write(colors.green('Found entry, writing response with headers and cookies... '));
@@ -90,6 +84,14 @@ class Dexter {
             process.stdout.write(colors.green('Done \n'));
             response.end();
         }
+    }
+
+    attachCustomRoutes() {
+        this._app.all('/404', (request, response)=> {
+            response.statusCode = 404;
+            response.send('asdasd 404');
+            response.end();
+        });
     }
 
     /**
