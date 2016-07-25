@@ -62,7 +62,12 @@ class Dexter extends EventEmitter {
 
         this.emit('receivedRequest', url);
         try {
-            storedResponse = this._har.getResponseForUrl(request.url, method);
+            if (url === '/'){
+                response.statusCode = 200;
+                response.end();
+            }else{
+                storedResponse = this._har.getResponseForUrl(request.url, method);
+            }
         } catch (e) {
             this.emit('noEntryInHar');
             response.statusCode = 404;
@@ -96,6 +101,11 @@ class Dexter extends EventEmitter {
     }
 
     attachCustomRoutes() {
+        this._app.get('/', function(request, response) {
+            response.statusCode = 200;
+            request.json({ message: 'hooray! welcome to our api!' });
+            response.end();
+        });
         this._app.all('/404', (request, response)=> {
             response.statusCode = 404;
             response.send('404');

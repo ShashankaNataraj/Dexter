@@ -30,7 +30,7 @@ describe('Dexter', ()=> {
             harServer = new Dexter(harPath);
 
         expect(harServer).to.have.property('_port');
-        expect(harServer._port).to.be.above(0);
+        expect(harServer._port).to.equal(1121);
     });
 
 });
