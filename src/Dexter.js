@@ -62,19 +62,19 @@ class Dexter extends EventEmitter {
 
         this.emit('receivedRequest', url);
         try {
-            if (url === '/'){
+            if (url === '/') { // If this is a root request, just send out a 200 and be done with it
                 response.statusCode = 200;
                 response.end();
-            }else{
+            } else { // Try to serve if this is a genuine request
                 storedResponse = this._har.getResponseForUrl(request.url, method);
             }
         } catch (e) {
-            this.emit('noEntryInHar');
+            this.emit('noEntryInHar', url);
             response.statusCode = 404;
             response.end();
         }
         if (typeof storedResponse !== 'undefined') {
-            this.emit('foundHarEntry');
+            this.emit('foundHarEntry', url);
             // Set the status
             response.status(storedResponse.status);
 
@@ -101,9 +101,9 @@ class Dexter extends EventEmitter {
     }
 
     attachCustomRoutes() {
-        this._app.get('/', function(request, response) {
+        this._app.get('/', function (request, response) {
             response.statusCode = 200;
-            request.json({ message: 'hooray! welcome to our api!' });
+            request.json({message: 'hooray! welcome to our api!'});
             response.end();
         });
         this._app.all('/404', (request, response)=> {

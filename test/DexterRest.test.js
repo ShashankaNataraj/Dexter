@@ -10,15 +10,16 @@ const
     serverAddress = 'http://127.0.0.1:1121';
 
 chai.use(chaiHttp);
+
 describe('Rest API', () => {
     before(() => {
         dexterServer.startUp();
     });
 
-    it('should be able to access root', (done) => {
+    it('should be able to access root path', (done) => {
         chai.request(serverAddress)
             .get('/')
-            .end(function (err, response) {
+            .end((err, response) => {
                 expect(response.status).to.equal(200);
                 done();
             });

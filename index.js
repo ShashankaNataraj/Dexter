@@ -15,10 +15,10 @@ new
     .on('receivedRequest', (url)=> {
         process.stdout.write(colors.yellow('Serving ' + url + ':'));
     })
-    .on('noEntryInHar', ()=> {
+    .on('noEntryInHar', (url)=> {
         process.stdout.write(colors.red('Didn\'t find corresponding entry in HAR, returning 404\n'));
     })
-    .on('foundHarEntry', ()=> {
+    .on('foundHarEntry', (url)=> {
         process.stdout.write(colors.green('Found entry, writing response with headers and cookies... '));
     })
     .on('requestServedSuccessfully', ()=> {
