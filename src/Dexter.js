@@ -5,7 +5,6 @@
  * */
 const
     express = require('express'),
-    parseArgs = require('minimist'),
     path = require('path'),
     EventEmitter = require('events').EventEmitter,
     harReader = require(__dirname + '/HarReader'),
@@ -37,7 +36,7 @@ class Dexter extends EventEmitter {
      * Start listening
      * */
     startServer() {
-        this.server = this._app.listen(this._port, ()=> { //Start the server and listen on a port
+        this.server = this._app.listen(this._port, () => { //Start the server and listen on a port
             this._har.readHar(this._harPath);
             this.emit('startupSuccess', this._port);
         });
@@ -47,7 +46,7 @@ class Dexter extends EventEmitter {
      * Attaches HTTP method handlers to incoming requests
      * */
     attachMethodHandlers() {
-        this._app.all('/*', (request, response)=> {
+        this._app.all('/*', (request, response) => {
             this.genericHandler(request, response, request.method);
         });
     }
@@ -80,12 +79,12 @@ class Dexter extends EventEmitter {
 
             // Set the headers
             let headers = utils.filterHeaders(storedResponse.headers);
-            headers.forEach((header)=> {
+            headers.forEach((header) => {
                 response.setHeader(header.name, header.value)
             });
 
             // Set Cookies
-            storedResponse.cookies.forEach((cookie)=> {
+            storedResponse.cookies.forEach((cookie) => {
                 response.cookie(
                     cookie.name,
                     cookie.value,
@@ -103,10 +102,10 @@ class Dexter extends EventEmitter {
     attachCustomRoutes() {
         this._app.get('/', function (request, response) {
             response.statusCode = 200;
-            request.json({message: 'hooray! welcome to our api!'});
+            request.json({ message: 'hooray! welcome to our api!' });
             response.end();
         });
-        this._app.all('/404', (request, response)=> {
+        this._app.all('/404', (request, response) => {
             response.statusCode = 404;
             response.send('404');
             response.end();

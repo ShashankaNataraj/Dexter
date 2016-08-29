@@ -1,7 +1,8 @@
 "use strict";
 const
     Dexter = require(__dirname + '/src/Dexter.js'),
-    colors = require('colors');
+    colors = require('colors'),
+    parseArgs = require('minimist')(process.argv.slice(2));
 
 new
     Dexter('test/data/sample.har', process.env.PORT)
