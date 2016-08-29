@@ -7,7 +7,7 @@ const
     harPath = path.resolve(__dirname, 'test/data/sample.har');
 
 describe('Dexter', ()=> {
-    
+
     it('should accept a har file path', ()=> {
         let
             harServer = new Dexter(harPath);

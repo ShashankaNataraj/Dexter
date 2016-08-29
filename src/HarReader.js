@@ -1,5 +1,6 @@
 'use strict';
-const fs = require('fs'),
+const
+    fs = require('fs'),
     url = require('url'),
     wurl = require('wurl'),
     readFile = require('fs-readfile-promise');
@@ -28,7 +29,10 @@ class HarReader {
                 throw err;
             });
     }
-
+    
+    /*
+     * Parses the log entries in the HAR and creates a map based structure to store the same.
+     * */
     parseHar() {
         this.parsedHar.log.entries.forEach((entry) => { //Construct response map based structure
             this.responseMap.set(
@@ -50,4 +54,5 @@ class HarReader {
         else return storedResponse;
     }
 }
+
 module.exports = HarReader;
