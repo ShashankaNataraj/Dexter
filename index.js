@@ -11,17 +11,24 @@ let
     port = parsedArgs['p'] || 1121,
     verboseMode = parsedArgs['v'] || false;
 
+/**
+ * 
+ * @description Controls Dexter's logging
+ * @param {String} output
+ * @param {Boolean} verboseControlled pass false if the log message should always be output regardless of verboseMode value
+ */
 function log(output, verboseControlled) {
-    if (verboseControlled) {
-        if (verboseMode) {
+    if (verboseControlled) {// If verboseControlled, check if verboseMode is enabled
+        if (verboseMode) { // If yes, output
             console.log(output);
         } else {
             //Swallow console log
         }
-    } else {
+    } else { // If not verboseControlled, always output it
         console.log(output);
     }
 }
+
 new
     Dexter(harFilePath, port)
     .startUp()
