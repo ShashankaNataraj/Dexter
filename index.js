@@ -7,26 +7,39 @@ const
     parsedArgs = ArgParser.parse(process.argv.slice(2));
 
 let
-    harFilePath = parsedArgs['h'] || 'test/data/sample.har';
+    harFilePath = parsedArgs['h'] || 'test/data/sample.har',
+    port = parsedArgs['p'] || 1121,
+    verboseMode = parsedArgs['v'] || false;
 
+function log(output, verboseControlled) {
+    if (verboseControlled) {
+        if (verboseMode) {
+            console.log(output);
+        } else {
+            //Swallow console log
+        }
+    } else {
+        console.log(output);
+    }
+}
 new
-    Dexter(harFilePath, process.env.PORT)
+    Dexter(harFilePath, port)
     .startUp()
     .on('startupSuccess', (port) => {
-        console.log(colors.green.bold('Started Dexter at:' + port));
+        log(colors.green.bold('Started Dexter at:' + port), false);
     })
     .on('shutdownSuccess', () => {
-        console.log(colors.red.bold('Stopped Dexter'));
+        log(colors.red.bold('Stopped Dexter'), false);
     })
     .on('receivedRequest', (url) => {
-        process.stdout.write(colors.yellow('Serving ' + url + ':'));
+        log(colors.yellow('Serving ' + url), true);
     })
     .on('noEntryInHar', (url) => {
-        process.stdout.write(colors.red('Didn\'t find corresponding entry in HAR, returning 404\n'));
+        log(colors.red('Didn\'t find corresponding entry in HAR, returning 404\n'), true);
     })
     .on('foundHarEntry', (url) => {
-        process.stdout.write(colors.green('Found entry, writing response with headers and cookies... '));
+        log(colors.green('Found entry, writing response with headers and cookies... '), true);
     })
     .on('requestServedSuccessfully', () => {
-        process.stdout.write(colors.green('Done \n'));
+        log(colors.green('Done \n'), true);
     });

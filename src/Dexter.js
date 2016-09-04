@@ -17,7 +17,7 @@ class Dexter extends EventEmitter {
     constructor(harPath, port) {
         super();
         this._app = express();
-        this._port = port || 1121;
+        this._port = port;
         this._har = new harReader();
         this._harPath = harPath;
     }

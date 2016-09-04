@@ -25,12 +25,4 @@ describe('Dexter', ()=> {
         expect(harServer._port).to.equal(port);
     });
 
-    it('should use a default port if none specified', ()=> {
-        let
-            harServer = new Dexter(harPath);
-
-        expect(harServer).to.have.property('_port');
-        expect(harServer._port).to.equal(1121);
-    });
-
 });
