@@ -14,7 +14,7 @@ let
 /**
  * 
  * @description Controls Dexter's logging
- * @param {String} output
+ * @param {string} output
  * @param {Boolean} verboseControlled pass false if the log message should always be output regardless of verboseMode value
  */
 function log(output, verboseControlled) {
