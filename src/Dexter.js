@@ -4,9 +4,10 @@ const
     express = require('express'),
     path = require('path'),
     EventEmitter = require('events').EventEmitter,
-    harReader = require(__dirname + '/HarReader'),
-    HarUtils = require(__dirname + '/HarUtils'),
-    utils = new HarUtils();
+    harReader = require('./HarReader'),
+    HarUtils = require('./HarUtils'),
+    utils = new HarUtils(),
+    DexterException = require('./DexterException');
 
 /**
  * 
@@ -25,7 +26,11 @@ class Dexter extends EventEmitter {
     constructor(harPath, port) {
         super();
         this._app = express();
-        this._port = port;
+        if (isNaN(parseInt(port))) {
+            throw new DexterException('Invalid port specified','InvalidPort');
+        } else {
+            this._port = port;
+        }
         this._har = new harReader();
         this._harPath = harPath;
     }
@@ -110,14 +115,14 @@ class Dexter extends EventEmitter {
      * @returns {string} storedResponse
      * @description Returns a HAR entry corresponding to the URL for which the request was received, throws appropriate exceptions if no entries are found in HAR file.
      */
-    getStoredResponse(url, response) {
+    getStoredResponse(url, response, method) {
         let storedResponse;
         try {
             if (url === '/') { // If this is a root request, just send out a 200 and be done with it
                 response.statusCode = 200;
                 response.end();
             } else { // Try to serve if this is a genuine request
-                storedResponse = this._har.getResponseForUrl(request.url, method);
+                storedResponse = this._har.getResponseForUrl(url, method);
             }
         } catch (e) {
             this.emit('noEntryInHar', url);
@@ -151,7 +156,7 @@ class Dexter extends EventEmitter {
 
         this.emit('receivedRequest', url);
 
-        storedResponse = this.getStoredResponse(url, response);
+        storedResponse = this.getStoredResponse(url, response, method);
 
         if (typeof storedResponse !== 'undefined') {
             this.emit('foundHarEntry', url);

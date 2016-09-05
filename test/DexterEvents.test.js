@@ -12,7 +12,6 @@ const
 chai.use(chaiHttp);
 
 describe('Dexter Events', () => {
-
     it('should raise an event for startup', (done) => {
         dexterServer.once('startupSuccess', (port)=> {
             expect(port).to.equal(1121);

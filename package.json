@@ -22,7 +22,7 @@
     "wurl": "^2.1.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js --h test/data/sample.har --v ",
     "test": "mocha",
     "coverage": "istanbul cover _mocha -- -R spec | coveralls"
   },
