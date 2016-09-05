@@ -3,7 +3,7 @@
 const
     path = require('path'),
     Dexter = require('../src/Dexter.js'),
-    dexterServer = new Dexter(path.resolve(__dirname, 'test/data/sample.har')),
+    dexterServer = new Dexter(path.resolve(__dirname, 'test/data/sample.har'),1121),
     chai = require('chai'),
     chaiHttp = require('chai-http'),
     expect = require('chai').expect,

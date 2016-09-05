@@ -6,17 +6,17 @@ const
     expect = require('chai').expect,
     harPath = path.resolve(__dirname, 'test/data/sample.har');
 
-describe('Dexter', ()=> {
+describe('Dexter', () => {
 
-    it('should accept a har file path', ()=> {
+    it('should accept a har file path', () => {
         let
-            harServer = new Dexter(harPath);
+            harServer = new Dexter(harPath, 1121);
 
         expect(harServer).to.have.property('_harPath');
         expect(harServer._harPath).to.equal(harPath);
     });
 
-    it('should accept a port if specified', ()=> {
+    it('should accept a port if specified', () => {
         let
             port = 3000,
             harServer = new Dexter(harPath, port);

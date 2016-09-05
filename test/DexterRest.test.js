@@ -6,7 +6,7 @@ const
     chai = require('chai'),
     chaiHttp = require('chai-http'),
     expect = chai.expect,
-    dexterServer = new Dexter(path.resolve(__dirname, 'test/data/sample.har')),
+    dexterServer = new Dexter(path.resolve(__dirname, 'test/data/sample.har'),1121),
     serverAddress = 'http://127.0.0.1:1121';
 
 chai.use(chaiHttp);
