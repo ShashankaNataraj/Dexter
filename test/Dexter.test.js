@@ -4,7 +4,8 @@ const
     Dexter = require('../src/Dexter'),
     path = require('path'),
     expect = require('chai').expect,
-    harPath = path.resolve(__dirname, 'test/data/sample.har');
+    harPath = path.resolve(__dirname, 'test/data/sample.har'),
+    DexterException = require('../src/DexterException');
 
 describe('Dexter', () => {
 
@@ -14,6 +15,16 @@ describe('Dexter', () => {
 
         expect(harServer).to.have.property('_harPath');
         expect(harServer._harPath).to.equal(harPath);
+    });
+
+
+    it('should throw an exception if no port is specified', () => {
+        try {
+            let harServer = new Dexter(harPath);
+        }catch(ex){
+            expect(ex).to.have.property('name');
+            expect(ex.name).to.equal('InvalidPort');
+        }
     });
 
     it('should accept a port if specified', () => {

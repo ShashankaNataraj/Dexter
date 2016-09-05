@@ -134,8 +134,8 @@ class Dexter extends EventEmitter {
     /**
      * 
      * 
-     * @param {any} response
-     * @param {any} storedResponse
+     * @param {object} response
+     * @param {object} storedResponse
      * @description Sets text content for an incoming HTTP request.
      */
     sendText(response, storedResponse) {
