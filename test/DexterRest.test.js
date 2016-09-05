@@ -35,6 +35,6 @@ describe('Rest API', () => {
     });
 
     after(() => {
-        dexterServer.tearDown();
+        dexterServer._tearDown();
     });
 });

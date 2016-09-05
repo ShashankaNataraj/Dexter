@@ -26,15 +26,15 @@ class Dexter extends EventEmitter {
     constructor(harPath, port) {
         super();
         this._app = express();
-        this._assignHAR();
-        this._assignPort();
+        this._storeHAR(harPath);
+        this._storePort(port);
     }
 
     /**
      * @private
      * @description Responsible for assigning HARPath, Har variable and throwing any associated exceptions
      */
-    _assignHAR() {
+    _storeHAR(harPath) {
         if (harPath !== undefined) {
             this._harPath = harPath;
         } else {
@@ -46,7 +46,7 @@ class Dexter extends EventEmitter {
     /**
      * @private
      */
-    _assignPort() {
+    _storePort(port) {
         if (isNaN(parseInt(port))) {
             throw new DexterException('Invalid port specified', 'InvalidPort');
         } else {
