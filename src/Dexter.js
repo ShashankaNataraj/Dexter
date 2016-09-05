@@ -26,42 +26,41 @@ class Dexter extends EventEmitter {
     constructor(harPath, port) {
         super();
         this._app = express();
+        this._assignHAR();
+        this._assignPort();
+    }
+
+    /**
+     * @private
+     * @description Responsible for assigning HARPath, Har variable and throwing any associated exceptions
+     */
+    _assignHAR() {
+        if (harPath !== undefined) {
+            this._harPath = harPath;
+        } else {
+            throw new DexterException('HAR file path not specified', 'InvalidHAR');
+        }
+        this._har = new harReader();
+    }
+
+    /**
+     * @private
+     */
+    _assignPort() {
         if (isNaN(parseInt(port))) {
-            throw new DexterException('Invalid port specified','InvalidPort');
+            throw new DexterException('Invalid port specified', 'InvalidPort');
         } else {
             this._port = port;
         }
-        this._har = new harReader();
-        this._harPath = harPath;
-    }
-    /**
-     * 
-     * @description Handles entire server startup process (aka Ooh what does this button do)
-     * @returns Dexter
-     */
-    startUp() {
-        this.attachMethodHandlers();
-        this.attachCustomRoutes();
-        this.startServer();
-        return this;
     }
 
     /**
-     * @description Start listening to incoming requests
-     */
-    startServer() {
-        this.server = this._app.listen(this._port, () => { //Start the server and listen on a port
-            this._har.readHar(this._harPath);
-            this.emit('startupSuccess', this._port);
-        });
-    }
-
-    /**
+     * @private
      * @description Attaches HTTP method handlers to incoming requests
      */
-    attachMethodHandlers() {
+    _attachMethodHandlers() {
         this._app.all('/*', (request, response) => {
-            this.genericHandler(request, response, request.method);
+            this._genericHandler(request, response, request.method);
         });
     }
 
@@ -70,9 +69,10 @@ class Dexter extends EventEmitter {
      * 
      * @param {any} response
      * @param {any} storedResponse
+     * @private
      * @description Sets the HTTP status code to an incoming request, reads status codes from the HAR file for the corresponding response
      */
-    setStatus(response, storedResponse) {
+    _setStatus(response, storedResponse) {
         response.status(storedResponse.status);
     }
 
@@ -81,9 +81,10 @@ class Dexter extends EventEmitter {
      * 
      * @param {object} response
      * @param {object} storedResponse
+     * @private
      * @description Sets headers to an incoming request, reads status codes from the HAR file for the corresponding response
      */
-    setHeaders(response, storedResponse) {
+    _setHeaders(response, storedResponse) {
         let headers = utils.filterHeaders(storedResponse.headers);
         headers.forEach((header) => {
             response.setHeader(header.name, header.value)
@@ -95,9 +96,10 @@ class Dexter extends EventEmitter {
      * 
      * @param {object} response
      * @param {object} storedResponse
+     * @private
      * @description Sets cookies for an incoming HTTP request, reads cookies from the HAR file for the corresponding response.
      */
-    setCookies(response, storedResponse) {
+    _setCookies(response, storedResponse) {
         storedResponse.cookies.forEach((cookie) => {
             response.cookie(
                 cookie.name,
@@ -113,9 +115,10 @@ class Dexter extends EventEmitter {
      * @param {string} url
      * @param {object} response
      * @returns {string} storedResponse
+     * @private
      * @description Returns a HAR entry corresponding to the URL for which the request was received, throws appropriate exceptions if no entries are found in HAR file.
      */
-    getStoredResponse(url, response, method) {
+    _getStoredResponse(url, response, method) {
         let storedResponse;
         try {
             if (url === '/') { // If this is a root request, just send out a 200 and be done with it
@@ -136,9 +139,10 @@ class Dexter extends EventEmitter {
      * 
      * @param {object} response
      * @param {object} storedResponse
+     * @private
      * @description Sets text content for an incoming HTTP request.
      */
-    sendText(response, storedResponse) {
+    _sendText(response, storedResponse) {
         response.send(storedResponse.content.text);
     }
     /**
@@ -147,31 +151,32 @@ class Dexter extends EventEmitter {
      * @param {object} request
      * @param {object} response
      * @param {string} method
+     * @private
      * @description Callback handler for all HTTP requests handled by Dexter.
      */
-    genericHandler(request, response, method) {
+    _genericHandler(request, response, method) {
         let
             storedResponse,
             url = request.url;
 
         this.emit('receivedRequest', url);
 
-        storedResponse = this.getStoredResponse(url, response, method);
+        storedResponse = this._getStoredResponse(url, response, method);
 
         if (typeof storedResponse !== 'undefined') {
             this.emit('foundHarEntry', url);
 
             // Set the status
-            this.setStatus(response, storedResponse);
+            this._setStatus(response, storedResponse);
 
             // Set the headers
-            this.setHeaders(response, storedResponse);
+            this._setHeaders(response, storedResponse);
 
             // Set Cookies
-            this.setCookies(response, storedResponse);
+            this._setCookies(response, storedResponse);
 
             // Send the text content
-            this.sendText(response, storedResponse);
+            this._sendText(response, storedResponse);
 
             this.emit('requestServedSuccessfully');
 
@@ -180,9 +185,10 @@ class Dexter extends EventEmitter {
     }
 
     /**
+     * @private
      * @description Attaches custom 200 and 404 handlers to show good looking pages instead of blank ones
      */
-    attachCustomRoutes() {
+    _attachCustomRoutes() {
         this._app.get('/', function (request, response) {
             response.statusCode = 200;
             request.json({ message: 'hooray! welcome to our api!' });
@@ -196,11 +202,35 @@ class Dexter extends EventEmitter {
     }
 
     /**
+     * @private
      * @description Tears down the HTTP server and cleans up all resources (aka Dee Dee :O)
      */
-    tearDown() {
+    _tearDown() {
         this.server.close();
         this.emit('shutdownSuccess', this._port);
+    }
+    /**
+     * 
+     * @returns Dexter
+     * @description Handles entire server startup process (aka Ooh what does this button do)
+     * @public
+     */
+    startUp() {
+        this._attachMethodHandlers();
+        this._attachCustomRoutes();
+        this.startServer();
+        return this;
+    }
+
+    /**
+     * @description Starts listening to incoming requests
+     * @public
+     */
+    startServer() {
+        this.server = this._app.listen(this._port, () => { //Start the server and listen on a port
+            this._har.readHar(this._harPath);
+            this.emit('startupSuccess', this._port);
+        });
     }
 }
 

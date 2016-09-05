@@ -48,7 +48,7 @@ describe('Dexter Events', () => {
             expect(port).to.equal(1121);
             done();
         });
-        dexterServer.tearDown();
+        dexterServer._tearDown();
     });
 
 });
