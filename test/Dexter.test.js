@@ -9,6 +9,17 @@ const
 
 describe('Dexter', () => {
 
+
+    it('should throw an exception if no HAR path is specified', () => {
+        try {
+            let
+                harServer = new Dexter();
+        } catch (ex) {
+            expect(ex).to.have.property('name');
+            expect(ex.name).to.equal('InvalidHAR');
+        }
+    });
+
     it('should accept a har file path', () => {
         let
             harServer = new Dexter(harPath, 1121);
@@ -21,7 +32,7 @@ describe('Dexter', () => {
     it('should throw an exception if no port is specified', () => {
         try {
             let harServer = new Dexter(harPath);
-        }catch(ex){
+        } catch (ex) {
             expect(ex).to.have.property('name');
             expect(ex.name).to.equal('InvalidPort');
         }

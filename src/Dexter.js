@@ -45,6 +45,7 @@ class Dexter extends EventEmitter {
 
     /**
      * @private
+     * @description Stores the port with which dexter was invoked
      */
     _storePort(port) {
         if (isNaN(parseInt(port))) {
