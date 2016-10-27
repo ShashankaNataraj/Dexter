@@ -2,24 +2,31 @@
 const
     harReader = require('../src/HarReader'),
     path = require('path'),
-    har = new harReader(),
     expect = require('chai').expect,
-    harPath = path.resolve(__dirname, 'test/data/doesnt_exist.har');
+    harPathInvalidFile = path.resolve(__dirname, 'test/data/doesnt_exist.har'),
+    harPathIncorrectFileFormat = path.resolve(__dirname, 'test/data/json_wrong_format.har');
 
 
 describe('HAR Reader', () => {
-    it('should throw an error if files which don\'t exist are used', function () {
-        return har
-            .readHar(harPath)
-            .catch(function (data) {
-                expect(data.code).to.equal('ENOENT');
-            });
+
+    it('should throw an error if file path is not specified', () => {
+        let har;
+        try {
+            har = new harReader();
+            console.log('here');
+        } catch (ex) {
+            expect(ex).to.have.property('name');
+            expect(ex.name).to.equal('InvalidHARPath');
+        }
     });
-    it('should be able to load a HAR file and parse it', function () {
-        return har
-            .readHar('test/data/sample.har')
-            .then((data) => {
-                expect(har).to.have.property('parsedHar');
-            });
+
+    it('should throw an error if the specified file is not a valid HAR file', () => {
+        let har;
+        try {
+            har = new harReader(harPathIncorrectFileFormat);
+        } catch (ex) {
+            expect(ex).to.have.property('name');
+            expect(ex.name).to.equal('InvalidHARFormat');
+        }
     });
 });

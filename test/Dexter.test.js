@@ -8,8 +8,6 @@ const
     DexterException = require('../src/DexterException');
 
 describe('Dexter', () => {
-
-
     it('should throw an exception if no HAR path is specified', () => {
         try {
             let

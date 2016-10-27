@@ -40,7 +40,7 @@ class Dexter extends EventEmitter {
         } else {
             throw new DexterException('HAR file path not specified', 'InvalidHAR');
         }
-        this._har = new harReader();
+        this._har = new harReader(harPath);
     }
 
     /**
@@ -229,7 +229,6 @@ class Dexter extends EventEmitter {
      */
     startServer() {
         this.server = this._app.listen(this._port, () => { //Start the server and listen on a port
-            this._har.readHar(this._harPath);
             this.emit('startupSuccess', this._port);
         });
     }

@@ -4,7 +4,8 @@ const
     fs = require('fs'),
     url = require('url'),
     wurl = require('wurl'),
-    readFile = require('fs-readfile-promise');
+    readFile = require('fs-readfile-promise'),
+    DexterException = require('./DexterException');
 
 /**
  * 
@@ -18,9 +19,10 @@ class HarReader {
      * @constructor
      * @description Creates an instance of HarReader.
      */
-    constructor() {
+    constructor(filePath) {
         this.responseMap = new Map(); //Can be done with an object too, but using a map just because
-        this.parsedHar = null;
+        this._parsedHar = null;
+        this._readHar(filePath);
     }
 
     /**
@@ -29,22 +31,19 @@ class HarReader {
      * @param {string} filePath
      * @returns {object} promise
      */
-    readHar(filePath) {
-        return readFile(filePath)
-            .then(rawHar=> {
-                try {
-                    this.parsedHar = JSON.parse(rawHar);
-                }
-                catch (err) {//Catch JSON format exceptions
-                    throw err;
-                }
-                this.parseHar();
-            })
-            .catch(err=> {
-                throw err;
-            });
+    _readHar(filePath) {
+        if (typeof filePath === 'undefined') {
+            throw new DexterException('Invalid file path', 'InvalidHARPath');
+        }
+        try {
+            this._parsedHar = JSON.parse(readFileSync(filePath));
+        }
+        catch (ex) {
+            throw new DexterException('Invalid HAR format', 'InvalidHARFormat');
+        }
+        this.parseHar();
     }
-    
+
     /*
      * Parses the log entries in the HAR and creates a map based structure to store the same.
      * */
@@ -54,7 +53,7 @@ class HarReader {
      * @returns
      */
     parseHar() {
-        this.parsedHar.log.entries.forEach((entry) => { //Construct response map based structure
+        this._parsedHar.log.entries.forEach((entry) => { //Construct response map based structure
             this.responseMap.set(
                 wurl('path', entry.request.url), // Take in only the paths, not the domain names because thats of no use to us
                 entry.response
