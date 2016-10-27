@@ -1,5 +1,5 @@
 {
-  "name": "dexter",
+  "name": "dexter-mocks",
   "version": "1.0.0",
   "description": "The HAR file proxy server",
   "main": "index.js",
