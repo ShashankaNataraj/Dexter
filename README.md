@@ -20,9 +20,9 @@ Open your prod servers' URL in chrome with the inspector tab open. Browse around
 ###### Using dexter
 
     Options:
-    -f, --f             Har file path
-    -p, --p             Defaults to 1121 if no port arg is specified
-    -v, --v             Trigger verbose mode
+    -f, --f             Har file path, defaults to serving Dexters' github page if none specified
+    -p, --p             Port parameter, defaults to 1121 if no port arg is specified
+    -v, --v             Trigger verbose mode, defaults to non-verbose mode
     
 ###### Example:
     dexter -f prodServerHar.har -p 3000 -v
