@@ -10,6 +10,22 @@ Dexter is a [HAR file](https://www.maxcdn.com/one/visual-glossary/har-file/) pro
 Dexter is simple, very light weight and blazingly fast. Instead of running your entire development server on your machine, just run Dexter and point your Grunt / Gulp proxy server to it.
 
 ### Ok, I'm in, Whats the setup?
-### Whats the catch?
+###### Generating a HAR file
+Open your prod servers' URL in chrome with the inspector tab open. Browse around to all those screens which make XHR calls to all of your API's. Then save the entire set of calls as a HAR file. [This link has information on how to generate a HAR file](https://confluence.atlassian.com/kb/generating-har-files-and-analysing-web-requests-720420612.html)
+
+###### Installing dexter
+
+    <sudo> npm install -g dexter-mocks
+    
+###### Using dexter
+
+    Options:
+    -f, --f             Har file path
+    -p, --p             Defaults to 1121 if no port arg is specified
+    -v, --v             Trigger verbose mode
+    
+###### Example:
+    dexter -f prodServerHar.har -p 3000 -v
+
 ### What inspired this project?
 [EasyMock](https://github.com/CyberAgent/node-easymock)

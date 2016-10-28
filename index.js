@@ -7,7 +7,7 @@ const
     parsedArgs = ArgParser.parse(process.argv.slice(2));
 
 let
-    harFilePath = parsedArgs['h'] || 'test/data/sample.har',
+    harFilePath = parsedArgs['f'] || 'test/data/sample.har',
     port = parsedArgs['p'] || 1121,
     verboseMode = parsedArgs['v'] || false;
 
