@@ -1,0 +1,27 @@
+{
+  "name": "dexter",
+  "version": "1.0.0",
+  "description": "Har file proxy server",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://shashankanataraj@github.com/ShashankaNataraj/Dexter.git"
+  },
+  "keywords": [
+    "har",
+    "file",
+    "har-file",
+    "proxy"
+  ],
+  "author": "Shashanka Nataraj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ShashankaNataraj/Dexter/issues"
+  },
+  "homepage": "https://github.com/ShashankaNataraj/Dexter#readme"
+}
