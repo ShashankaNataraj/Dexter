@@ -4,6 +4,8 @@
 [![Dependency status](https://david-dm.org/shashankanataraj/Dexter/status.png)](https://david-dm.org/cfogelberg/grunt-set-app-mode#info=dependencies&view=table)
 
 ### What is Dexter?
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/ShashankaNataraj/Dexter.svg)](https://greenkeeper.io/)
 Dexter is a [HAR file](https://www.maxcdn.com/one/visual-glossary/har-file/) proxy server.
 
 ### Why Dexter?
