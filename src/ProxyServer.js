@@ -1,18 +1,30 @@
-class ProxyServer { 
-    constructor() { 
-        
+import Hapi from 'hapi';
+class ProxyServer {
+    constructor(port = 8000, host = 'localhost') {
+        this.server = new Hapi.Server();
+        this
+            .server
+            .connection({ host, port });
+        return this;
     }
-    start() { 
-
+    addRoutes() { 
+        server.route({ method: 'GET', path: '/test', handler: handler });
     }
-    stop() { 
-
+    start() {
+        this
+            .server
+            .start();
+    }
+    stop() {
+        this
+            .server
+            .stop();
     }
     restart() {
         this.start();
         this.stop();
     }
-    serveRequest() { 
-
-    }
+    serveRequest() {}
 }
+
+export default new ProxyServer();

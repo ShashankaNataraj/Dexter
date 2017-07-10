@@ -7,4 +7,5 @@ describe('ProxyServer', () => {
     it('Should respond to a GET request to the root');
     it('Should respond with a 200 for routes that exist');
     it('Should respond with a 404 for routes that dont\'t exist');
+    it('Should respond with CORS headers');
 });
