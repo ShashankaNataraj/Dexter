@@ -5,6 +5,9 @@ class HARAdapter {
     read() { 
 
     }
+    validate() { 
+
+    }
 }
 
-export default new HARAdapter();
+export default HARAdapter;
