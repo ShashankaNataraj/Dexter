@@ -4,7 +4,7 @@
   "description": "Har file proxy server",
   "main": "index.js",
   "dependencies": {
-    "hapi": "^16.4.3"
+    "hapi": "^17.8.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
